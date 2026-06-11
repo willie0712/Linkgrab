@@ -43,16 +43,14 @@
 ---
 
 ## 📋 支援平台
-| 平台 | 狀態 |
-|------|------|
-| ▶️ YouTube | ✅ H.264 MP4 |✅MP3|
-| 📘 Facebook | ✅ 可下載 |❌MP3|
-| 📱 TikTok | ✅ 可下載 |❌MP3
-| 📷 Instagram | ✅ 可下載 |❌MP3|
-| 🎧 SoundCloud | ✅ MP3 |❌MP4 |
-| 🐦 Twitter | ✅ MP4可下載 |❌MP3|
-| 🎬 Vimeo | ✅ MP4可下載 |✅MP3|
 
+YouTube      → MP4 ✅  / MP3 ✅
+Facebook     → MP4 ✅  / MP3 ❌
+TikTok       → MP4 ✅  / MP3 ❌
+Instagram    → MP4 ✅  / MP3 ❌
+SoundCloud   → MP4 ❌  / MP3 ✅
+Twitter      → MP4 ✅  / MP3 ❌
+Vimeo        → MP4 ✅  / MP3 ✅
 
 ## 🛠️ 開發者資訊
 

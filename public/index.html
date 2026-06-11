@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkGrab - 多平台影片下載器</title>
+    <title>LinkGrab - 網頁版</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:system-ui, -apple-system, 'Segoe UI', Roboto;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);min-height:100vh;padding:20px}
+        body{font-family:system-ui,'Segoe UI',Roboto;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);min-height:100vh;padding:20px;position:relative}
+        .menu-dropdown{position:absolute;top:20px;right:20px;z-index:100}
+        .menu-btn{background:rgba(255,255,255,0.2);color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;backdrop-filter:blur(10px)}
+        .menu-btn:hover{background:#e94560}
+        .menu-content{display:none;position:absolute;right:0;top:45px;background:white;min-width:170px;border-radius:8px;overflow:hidden;box-shadow:0 8px 16px rgba(0,0,0,0.2)}
+        .menu-content a{color:#333;padding:12px 16px;text-decoration:none;display:block;font-size:14px}
+        .menu-content a:hover{background:#f0f0f0}
+        .menu-dropdown:hover .menu-content{display:block}
         .container{max-width:800px;margin:0 auto}
         .header{text-align:center;margin-bottom:30px}
         .header h1{font-size:48px;color:white;margin-bottom:10px}
@@ -40,10 +47,19 @@
         .footer{text-align:center;margin-top:30px;color:rgba(255,255,255,0.6);font-size:12px}
         .step{display:none}
         .step.visible{display:flex}
-        @media (max-width:768px){.step.visible{flex-direction:column}.url-input-wrapper{flex-direction:column}.format-options,.quality-options{flex-direction:column}}
+        @media (max-width:768px){.step.visible{flex-direction:column}.url-input-wrapper{flex-direction:column}.format-options,.quality-options{flex-direction:column}.menu-btn{padding:6px 12px;font-size:14px}.badge{padding:6px 12px;font-size:11px}}
     </style>
 </head>
 <body>
+<div class="menu-dropdown">
+    <button class="menu-btn">☰ 選單</button>
+    <div class="menu-content">
+        <a href="mailto:contact.website676@gmail.com">📧 聯絡我們</a>
+        <a href="#" id="faqBtn">❓ 常見問題</a>
+        <a href="#" id="tutorialBtn">📖 使用教學</a>
+        <a href="https://drive.google.com/你的分享連結" download>💻 電腦版下載</a>
+    </div>
+</div>
 <div class="container">
     <div class="header"><h1>🔗 <span>LinkGrab</span></h1><p>貼上連結，快速下載影片與音樂</p></div>
     <div class="platform-badges">
@@ -56,10 +72,7 @@
             <div class="step-content">
                 <div class="step-title">貼上連結</div>
                 <div class="step-desc">支援 YouTube、Facebook、TikTok、Instagram、SoundCloud、Twitter、Vimeo</div>
-                <div class="url-input-wrapper">
-                    <input type="text" id="urlInput" placeholder="貼上影片或音樂連結...">
-                    <button id="analyzeBtn" class="btn-primary">分析</button>
-                </div>
+                <div class="url-input-wrapper"><input type="text" id="urlInput" placeholder="貼上影片或音樂連結..."><button id="analyzeBtn" class="btn-primary">分析</button></div>
             </div>
         </div>
         <div class="step" id="step2">
@@ -87,133 +100,18 @@
     <div class="footer"><p>⚠️ 請遵守版權法規，僅供個人合理使用</p></div>
 </div>
 <script>
-const API_URL = 'http://localhost:3000';
-const analyzeBtn = document.getElementById('analyzeBtn');
-const urlInput = document.getElementById('urlInput');
-const step2 = document.getElementById('step2');
-const step3 = document.getElementById('step3');
-const qualitySection = document.getElementById('qualitySection');
-const downloadBtn = document.getElementById('downloadBtn');
-const loadingDiv = document.getElementById('loading');
-const errorMsg = document.getElementById('errorMsg');
-
-let selectedFormat = 'mp4';
-let selectedQuality = 'high';
-let currentUrl = '';
-
-document.querySelectorAll('.format-card').forEach(card => {
-    card.addEventListener('click', () => {
-        document.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
-        selectedFormat = card.dataset.format;
-        qualitySection.style.display = selectedFormat === 'mp3' ? 'none' : 'block';
-    });
-});
-
-document.querySelectorAll('.quality-card').forEach(card => {
-    card.addEventListener('click', () => {
-        document.querySelectorAll('.quality-card').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        selectedQuality = card.dataset.quality;
-    });
-});
-
-function showError(msg) {
-    errorMsg.textContent = `❌ ${msg}`;
-    errorMsg.style.display = 'block';
-    setTimeout(() => errorMsg.style.display = 'none', 5000);
-}
-
-function showLoading(show) {
-    loadingDiv.style.display = show ? 'block' : 'none';
-}
-
-async function analyzeUrl() {
-    const url = urlInput.value.trim();
-    if (!url) {
-        showError('請輸入網址');
-        return;
-    }
-    
-    currentUrl = url;
-    showLoading(true);
-    step2.classList.remove('visible');
-    step3.classList.remove('visible');
-    
-    try {
-        const response = await fetch(`${API_URL}/api/info`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url })
-        });
-        
-        const data = await response.json();
-        if (data.error) throw new Error(data.error);
-        
-        step2.classList.add('visible');
-        step3.classList.add('visible');
-    } catch (err) {
-        showError(err.message);
-    } finally {
-        showLoading(false);
-    }
-}
-
-async function download() {
-    if (!currentUrl) {
-        showError('請先分析網址');
-        return;
-    }
-    
-    showLoading(true);
-    
-    try {
-        const response = await fetch(`${API_URL}/api/download`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                url: currentUrl,
-                quality: selectedQuality,
-                format: selectedFormat
-            })
-        });
-        
-        if (!response.ok) {
-            const err = await response.json();
-            throw new Error(err.error || '下載失敗');
-        }
-        
-        const blob = await response.blob();
-        const downloadUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = downloadUrl;
-        
-        let filename = selectedFormat === 'mp3' ? 'audio.mp3' : 'video.mp4';
-        const contentDisposition = response.headers.get('Content-Disposition');
-        if (contentDisposition) {
-            const match = contentDisposition.match(/filename\*=UTF-8''(.+)/);
-            if (match) filename = decodeURIComponent(match[1]);
-        }
-        
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(downloadUrl);
-    } catch (err) {
-        showError(err.message);
-    } finally {
-        showLoading(false);
-    }
-}
-
-analyzeBtn.addEventListener('click', analyzeUrl);
-downloadBtn.addEventListener('click', download);
-urlInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') analyzeUrl();
-});
-
-document.querySelector('.format-card').classList.add('selected');
-document.querySelector('.quality-card').classList.add('active');
-qualitySection.style.display = 'block';
+document.getElementById('faqBtn')?.addEventListener('click',(e)=>{e.preventDefault();alert('❓ 常見問題\n\n1. 無法下載？\n   請確認連結正確，或改用電腦版。\n\n2. 下載速度慢？\n   影片大小影響速度。\n\n3. 支援哪些平台？\n   YouTube、Facebook、TikTok、Instagram、SoundCloud、Twitter、Vimeo');});
+document.getElementById('tutorialBtn')?.addEventListener('click',(e)=>{e.preventDefault();alert('📖 使用教學\n\n1. 貼上影片或音樂連結\n2. 點擊「分析」\n3. 選擇格式\n4. 選擇畫質\n5. 點擊「下載」');});
+const API_URL=window.location.origin,analyzeBtn=document.getElementById('analyzeBtn'),urlInput=document.getElementById('urlInput'),step2=document.getElementById('step2'),step3=document.getElementById('step3'),qualitySection=document.getElementById('qualitySection'),downloadBtn=document.getElementById('downloadBtn'),loadingDiv=document.getElementById('loading'),errorMsg=document.getElementById('errorMsg');
+let selectedFormat='mp4',selectedQuality='high',currentUrl='';
+document.querySelectorAll('.format-card').forEach(c=>{c.addEventListener('click',()=>{document.querySelectorAll('.format-card').forEach(c=>c.classList.remove('selected'));c.classList.add('selected');selectedFormat=c.dataset.format;qualitySection.style.display=selectedFormat==='mp3'?'none':'block';})});
+document.querySelectorAll('.quality-card').forEach(c=>{c.addEventListener('click',()=>{document.querySelectorAll('.quality-card').forEach(c=>c.classList.remove('active'));c.classList.add('active');selectedQuality=c.dataset.quality;})});
+function showError(msg){errorMsg.textContent=`❌ ${msg}`;errorMsg.style.display='block';setTimeout(()=>errorMsg.style.display='none',5000);}
+function showLoading(s){loadingDiv.style.display=s?'block':'none';}
+async function analyzeUrl(){const u=urlInput.value.trim();if(!u){showError('請輸入網址');return;}currentUrl=u;showLoading(true);step2.classList.remove('visible');step3.classList.remove('visible');try{const r=await fetch(`${API_URL}/api/info`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:u})});const d=await r.json();if(d.error)throw new Error(d.error);step2.classList.add('visible');step3.classList.add('visible');}catch(e){showError(e.message);}finally{showLoading(false);}}
+async function download(){if(!currentUrl){showError('請先分析網址');return;}showLoading(true);try{const r=await fetch(`${API_URL}/api/download`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:currentUrl,quality:selectedQuality,format:selectedFormat})});if(!r.ok){const e=await r.json();throw new Error(e.error||'下載失敗');}const blob=await r.blob();const a=document.createElement('a');a.href=URL.createObjectURL(blob);let fn=selectedFormat==='mp3'?'audio.mp3':'video.mp4';const cd=r.headers.get('Content-Disposition');if(cd){const m=cd.match(/filename\*=UTF-8''(.+)/);if(m)fn=decodeURIComponent(m[1]);}a.download=fn;a.click();URL.revokeObjectURL(a.href);}catch(e){showError(e.message);}finally{showLoading(false);}}
+analyzeBtn.addEventListener('click',analyzeUrl);downloadBtn.addEventListener('click',download);urlInput.addEventListener('keypress',e=>{if(e.key==='Enter')analyzeUrl();});
+document.querySelector('.format-card').classList.add('selected');document.querySelector('.quality-card').classList.add('active');qualitySection.style.display='block';
 </script>
 </body>
 </html>

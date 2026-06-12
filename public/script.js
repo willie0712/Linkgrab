@@ -1,3 +1,6 @@
+// 引入 Electron 的 IPC 通訊模組
+const { ipcRenderer } = require('electron');
+
 const analyzeBtn = document.getElementById('analyzeBtn');
 const urlInput = document.getElementById('urlInput');
 const step2 = document.getElementById('step2');
@@ -6,6 +9,7 @@ const qualitySection = document.getElementById('qualitySection');
 const downloadBtn = document.getElementById('downloadBtn');
 const loadingDiv = document.getElementById('loading');
 const errorMsg = document.getElementById('errorMsg');
+const downloadLink = document.getElementById('downloadLink');
 
 let selectedFormat = 'mp4';
 let selectedQuality = 'high';
@@ -38,81 +42,63 @@ function showLoading(show) {
     loadingDiv.style.display = show ? 'block' : 'none';
 }
 
+// 分析網址 (改用 ipcRenderer)
 async function analyzeUrl() {
     const url = urlInput.value.trim();
     if (!url) {
         showError('請輸入網址');
         return;
     }
-    
-    currentUrl = url;
+
     showLoading(true);
-    step2.style.display = 'none';
-    step3.style.display = 'none';
-    
     try {
-        const response = await fetch('/api/info', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url })
-        });
+        // 直接向主程序發送 IPC 請求
+        const data = await ipcRenderer.invoke('analyze-url', url);
+        currentUrl = url;
         
-        const data = await response.json();
+        document.getElementById('videoTitle').textContent = data.title;
+        document.getElementById('videoThumbnail').src = data.thumbnail;
         
-        if (data.error) throw new Error(data.error);
-        
-        step2.style.display = 'flex';
+        step2.style.display = 'block';
         step3.style.display = 'block';
         
     } catch (err) {
-        showError(err.message);
+        showError(err);
     } finally {
         showLoading(false);
     }
 }
 
+// 執行下載 (改用 ipcRenderer)
 async function download() {
-    if (!currentUrl) {
-        showError('請先分析網址');
-        return;
-    }
-    
+    if (!currentUrl) return;
     showLoading(true);
-    
     try {
-        const response = await fetch('/api/download', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                url: currentUrl,
-                quality: selectedQuality,
-                format: selectedFormat
-            })
+        // 向主程序請求下載並接收 Base64 資料
+        const result = await ipcRenderer.invoke('download-file', {
+            url: currentUrl,
+            quality: selectedQuality,
+            format: selectedFormat
         });
         
-        if (!response.ok) {
-            const err = await response.json();
-            throw new Error(err.error || '下載失敗');
+        // 將 Base64 還原為前端瀏覽器可下載的 Blob
+        const byteCharacters = atob(result.base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/octet-stream' });
         
-        const blob = await response.blob();
         const downloadUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = downloadUrl;
-        
-        let filename = selectedFormat === 'mp3' ? 'audio.mp3' : 'video.mp4';
-        const contentDisposition = response.headers.get('Content-Disposition');
-        if (contentDisposition) {
-            const match = contentDisposition.match(/filename\*=UTF-8''(.+)/);
-            if (match) filename = decodeURIComponent(match[1]);
-        }
-        
-        a.download = filename;
+        a.download = result.filename;
         a.click();
         URL.revokeObjectURL(downloadUrl);
         
     } catch (err) {
-        showError(err.message);
+        showError(err);
     } finally {
         showLoading(false);
     }
@@ -124,5 +110,6 @@ urlInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') analyzeUrl();
 });
 
-document.querySelector('.format-card').classList.add('selected');
-document.querySelector('.quality-card').classList.add('active');
+if (downloadLink) {
+    downloadLink.textContent = '💻 電腦版下載';
+}

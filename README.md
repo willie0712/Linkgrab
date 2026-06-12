@@ -1,23 +1,19 @@
-🔗 LinkGrab
+# LinkGrab
 
-## LinkGrab** 是一個免費、乾淨、無廣告的多平台影片下載器。
+LinkGrab is a small downloader app for supported video and music links.
 
-## 🌐 線上使用
+## Project structure
 
-👉 [https://linkgrab.onrender.com](立即前往)**
+- `index.html` - web entry page
+- `public/` - frontend assets
+- `main.js` - Electron desktop entry
+- `server.js` - local backend API
+- `package.json` - npm scripts and dependencies
 
-## 💻 PC 版下載
+## Run locally
 
-👉 [下載 LinkGrab Setup 1.0.0.exe]
+```bash
+npm install
+npm start
+```
 
-## 📋 支援平台
-
-| 平台 | 影片 (MP4) | 音樂 (MP3) |
-|------|------------|------------|
-| ▶️ YouTube | ✅ | ✅ |
-| 📘 Facebook | ✅ | ❌ |
-| 📱 TikTok | ✅ | ❌ |
-| 📷 Instagram | ✅ | ❌ |
-| 🎧 SoundCloud | ❌ | ✅ |
-| 🐦 Twitter | ✅ | ❌ |
-| 🎬 Vimeo | ✅ | ✅ |

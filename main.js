@@ -1,85 +1,59 @@
 const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
-const { fork } = require('child_process');
 const http = require('http');
-const fs = require('fs');
 
-let serverProcess = null;
-
-function startBackend() {
-    const scriptPath = path.join(process.cwd(), 'server.js');
-    console.log(`啟動後端: ${scriptPath}`);
-    
-    if (!fs.existsSync(scriptPath)) {
-        console.error('找不到 server.js');
-        return;
-    }
-    
-    serverProcess = fork(scriptPath, [], {
-        cwd: process.cwd(),
-        env: { ...process.env, NODE_ENV: 'production' }
-    });
-}
-
-function waitForBackend() {
-    return new Promise((resolve) => {
-        let attempts = 0;
-        const maxAttempts = 40;
-        
-        const check = () => {
-            attempts++;
-            const req = http.get('http://localhost:3000/api/health', (res) => {
-                if (res.statusCode === 200) {
-                    console.log('✅ 後端已就緒');
-                    resolve();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 200);
-                } else {
-                    console.warn('⚠️ 後端啟動逾時');
-                    resolve();
-                }
-            });
-            req.on('error', () => {
-                if (attempts < maxAttempts) {
-                    setTimeout(check, 200);
-                } else {
-                    resolve();
-                }
-            });
-            req.end();
-        };
-        
-        check();
-    });
-}
+let win;
 
 function createWindow() {
-    const win = new BrowserWindow({
-        width: 1200,
-        height: 800,
-        icon: path.join(__dirname, 'public', 'web.ico'),
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true
-        }
-    });
-    
-    win.loadURL('http://localhost:3000');
-    win.setMenuBarVisibility(false);
-    
-    win.webContents.setWindowOpenHandler(({ url }) => {
-        shell.openExternal(url);
-        return { action: 'deny' };
-    });
+  win = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    icon: path.join(__dirname, 'icon.ico'),
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true
+    }
+  });
+
+  // 正式載入本機 Express 服務網址，確保 fetch 路由完全對齊
+  win.loadURL('http://localhost:3000');
+  win.setMenuBarVisibility(false);
+
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
 }
 
-app.whenReady().then(async () => {
-    startBackend();
-    await waitForBackend();
+// 輪詢檢測：確保 Express 已經把 Port 3000 綁定成功後才開視窗
+function waitForServer() {
+  const req = http.request({ host: 'localhost', port: 3000, path: '/api/hello', method: 'GET' }, (res) => {
+    // 成功收到回應，代表後端已完全就緒
     createWindow();
+  });
+
+  req.on('error', () => {
+    // 失敗則隔 100ms 後重試
+    setTimeout(waitForServer, 100);
+  });
+
+  req.end();
+}
+
+app.whenReady().then(() => {
+  // 在 Electron 主程序內啟動 Express，避免打包後 fork 重新開啟 Electron 視窗程序
+  require(path.join(__dirname, 'server.js'));
+  
+  // 開始偵測後端狀態
+  waitForServer();
 });
 
 app.on('window-all-closed', () => {
-    if (serverProcess) serverProcess.kill();
-    if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('quit', () => {
+  // Express 會跟著 Electron 主程序一起結束
 });

@@ -1,52 +1,31 @@
 {
-  "name": "linkgrab-pc",
+  "name": "linkgrab-portable",
   "version": "1.0.0",
-  "description": "LinkGrab 影片下載器",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "dist": "electron-builder"
   },
   "build": {
-    "appId": "com.linkgrab.app",
-    "productName": "LinkGrab",
+    "appId": "com.linkgrab.portable",
+    "productName": "LinkGrab Portable",
     "directories": {
       "output": "dist"
     },
-    "files": [
-      "main.js",
-      "server.js",
-      "public/**/*",
-      "node_modules/**/*",
-      "!node_modules/.cache",
-      "!*.exe"
-    ],
-    "extraResources": [
-      {
-        "from": "yt-dlp.exe",
-        "to": "yt-dlp.exe"
-      },
-      {
-        "from": "ffmpeg.exe",
-        "to": "ffmpeg.exe"
-      }
-    ],
     "win": {
-      "target": "nsis",
-      "icon": "public/web.ico"
+      "target": "portable",
+      "icon": "icon.ico"
     },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true
-    }
-  },
-  "devDependencies": {
-    "electron": "^28.0.0",
-    "electron-builder": "^24.0.0"
+    "extraResources": [
+      "yt-dlp.exe",
+      "ffmpeg.exe"
+    ]
   },
   "dependencies": {
-    "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^4.22.2"
+  },
+  "devDependencies": {
+    "electron": "^28.3.3",
+    "electron-builder": "^26.15.2"
   }
 }

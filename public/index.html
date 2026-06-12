@@ -225,7 +225,6 @@
             margin-bottom: 15px;
         }
 
-        /* 搜尋區塊 */
         .search-section {
             margin-bottom: 20px;
             padding-bottom: 20px;
@@ -246,6 +245,7 @@
             background: var(--card-bg);
             color: var(--text-primary);
             font-size: 14px;
+            outline: none;
         }
 
         #searchPlatform {
@@ -256,6 +256,7 @@
             color: var(--text-primary);
             font-size: 14px;
             cursor: pointer;
+            outline: none;
         }
 
         .search-results {
@@ -333,6 +334,7 @@
             cursor: pointer;
             font-size: 16px;
             white-space: nowrap;
+            transition: all 0.2s;
         }
 
         .paste-btn:hover {
@@ -381,6 +383,7 @@
             font-size: 14px;
             background: var(--card-bg);
             color: var(--text-primary);
+            outline: none;
         }
 
         .video-info {
@@ -413,6 +416,7 @@
             font-weight: 600;
             margin-bottom: 8px;
             color: var(--text-primary);
+            word-break: break-word;
         }
 
         .video-meta {
@@ -451,6 +455,10 @@
             background: #fff0f2;
         }
 
+        .format-card:hover {
+            transform: translateY(-2px);
+        }
+
         .format-icon {
             font-size: 32px;
             margin-bottom: 8px;
@@ -485,11 +493,16 @@
             padding: 12px;
             text-align: center;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
         .quality-card.active {
             border-color: #e94560;
             background: #fff0f2;
+        }
+
+        .quality-card:hover {
+            transform: translateY(-2px);
         }
 
         .btn-download {
@@ -503,6 +516,12 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
 
         .loading {
@@ -558,6 +577,10 @@
             font-size: 12px;
         }
 
+        .clear-history:hover {
+            text-decoration: underline;
+        }
+
         .history-list {
             max-height: 200px;
             overflow-y: auto;
@@ -586,6 +609,14 @@
             text-overflow: ellipsis;
         }
 
+        .history-url {
+            font-size: 11px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .history-redownload {
             padding: 4px 10px;
             background: #e94560;
@@ -594,6 +625,11 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 11px;
+            transition: all 0.2s;
+        }
+
+        .history-redownload:hover {
+            opacity: 0.9;
         }
 
         .footer {
@@ -601,6 +637,17 @@
             margin-top: 30px;
             color: var(--footer-color);
             font-size: 12px;
+        }
+
+        .stats-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #a0c0e8;
+            text-decoration: none;
+        }
+
+        .stats-link:hover {
+            color: #e94560;
         }
 
         .step {
@@ -612,6 +659,26 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+            .header h1 {
+                font-size: 32px;
+            }
+            .card {
+                padding: 24px 20px;
+            }
+            .step.visible {
+                flex-direction: column;
+            }
+            .step-number {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            .step-title {
+                font-size: 18px;
+            }
             .search-input-wrapper {
                 flex-wrap: wrap;
             }
@@ -621,12 +688,19 @@
             .paste-btn, .btn-primary {
                 white-space: normal;
             }
-            .format-options, .quality-options {
+            .format-options {
+                flex-direction: column;
+            }
+            .quality-options {
                 flex-direction: column;
             }
             .menu-btn, .theme-btn, .lang-btn {
                 padding: 6px 12px;
                 font-size: 14px;
+            }
+            .badge {
+                padding: 6px 12px;
+                font-size: 11px;
             }
             .video-info-card {
                 flex-direction: column;
@@ -663,15 +737,14 @@
         <p id="siteDesc">貼上連結，快速下載影片與音樂</p>
     </div>
 
-    <!-- 平台徽章（會根據格式自動顯示/隱藏） -->
     <div class="platform-badges" id="platformBadges">
-        <span class="badge" data-platform="youtube" data-mp4="true" data-mp3="true">▶️ YouTube（音樂影片都行）</span>
-        <span class="badge" data-platform="facebook" data-mp4="true" data-mp3="false">📘 Facebook（僅限影片）</span>
-        <span class="badge" data-platform="tiktok" data-mp4="true" data-mp3="false">📱 TikTok（僅限影片）</span>
-        <span class="badge" data-platform="instagram" data-mp4="true" data-mp3="false">📷 Instagram（僅限影片）</span>
-        <span class="badge" data-platform="soundcloud" data-mp4="false" data-mp3="true">🎧 SoundCloud（僅限音樂）</span>
-        <span class="badge" data-platform="twitter" data-mp4="true" data-mp3="false">🐦 Twitter（僅限影片）</span>
-        <span class="badge" data-platform="vimeo" data-mp4="true" data-mp3="true">🎬 Vimeo（音樂影片都行）</span>
+        <span class="badge" data-platform="youtube" data-mp4="true" data-mp3="true">▶️ YouTube</span>
+        <span class="badge" data-platform="facebook" data-mp4="true" data-mp3="false">📘 Facebook</span>
+        <span class="badge" data-platform="tiktok" data-mp4="true" data-mp3="false">📱 TikTok</span>
+        <span class="badge" data-platform="instagram" data-mp4="true" data-mp3="false">📷 Instagram</span>
+        <span class="badge" data-platform="soundcloud" data-mp4="false" data-mp3="true">🎧 SoundCloud</span>
+        <span class="badge" data-platform="twitter" data-mp4="true" data-mp3="false">🐦 Twitter</span>
+        <span class="badge" data-platform="vimeo" data-mp4="true" data-mp3="true">🎬 Vimeo</span>
     </div>
 
     <div class="card">
@@ -679,9 +752,8 @@
             <div class="step-number">1</div>
             <div class="step-content">
                 <div class="step-title" id="step1Title">貼上連結</div>
-                <div class="step-desc" id="step1Desc">支援 YouTube（音樂影片都行）、Facebook（僅限影片）、TikTok（僅限影片）、Instagram（僅限影片）、SoundCloud（僅限音樂）、Twitter（僅限影片）、Vimeo（音樂影片都行）</div>
+                <div class="step-desc" id="step1Desc">支援 YouTube、Facebook、TikTok、Instagram、SoundCloud、Twitter、Vimeo</div>
                 
-                <!-- 搜尋區塊（僅支援 YouTube 和 SoundCloud） -->
                 <div class="search-section">
                     <div class="search-input-wrapper">
                         <input type="text" id="searchInput" placeholder="搜尋影片或音樂...">
@@ -779,43 +851,11 @@
             <span>🚫 無廣告</span>
             <span>🛡️ 純本機執行</span>
         </div>
-        <a href="https://statcounter.com/p13290772/?guest=1" target="_blank" class="stats-link" style="display: inline-block; margin-top: 10px;">📊 網站統計</a>
+        <a href="https://statcounter.com/p13290772/?guest=1" target="_blank" class="stats-link">📊 網站統計</a>
     </div>
 </div>
 
-<script type="text/javascript">
-var sc_project=13290772; 
-var sc_invisible=0; 
-var sc_security="72d25eb9"; 
-var scJsHost = "https://";
-document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
-"statcounter.com/counter/counter.js'></"+"script>");
-</script>
-<noscript>
-    <div class="statcounter">
-        <a title="Web Analytics" href="https://statcounter.com/" target="_blank">
-            <img class="statcounter" src="https://c.statcounter.com/13290772/0/72d25eb9/0/" alt="Web Analytics" referrerPolicy="no-referrer-when-downgrade">
-        </a>
-    </div>
-</noscript>
-
 <script>
-    // ========== 根據格式顯示/隱藏平台 ==========
-    function updatePlatformsByFormat(format) {
-        const badges = document.querySelectorAll('#platformBadges .badge');
-        badges.forEach(badge => {
-            const supportsMp4 = badge.dataset.mp4 === 'true';
-            const supportsMp3 = badge.dataset.mp3 === 'true';
-            if (format === 'mp4' && supportsMp4) {
-                badge.style.display = 'inline-block';
-            } else if (format === 'mp3' && supportsMp3) {
-                badge.style.display = 'inline-block';
-            } else {
-                badge.style.display = 'none';
-            }
-        });
-    }
-
     // ========== 多語言 ==========
     let currentLang = 'zh';
     
@@ -905,15 +945,6 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
             document.getElementById('noHistoryText').innerText = t.noHistory;
         }
         document.getElementById('loadingText').innerText = t.loadingText;
-        hideAppOnlyDownloadLink();
-    }
-
-    function hideAppOnlyDownloadLink() {
-        const downloadLink = document.getElementById('downloadLink');
-        const isDesktopApp = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-        if (downloadLink && isDesktopApp) {
-            downloadLink.style.display = 'none';
-        }
     }
     
     document.getElementById('langToggle')?.addEventListener('click', () => {
@@ -921,8 +952,6 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
         updateLanguage();
         localStorage.setItem('lang', currentLang);
     });
-
-    hideAppOnlyDownloadLink();
     
     const savedLang = localStorage.getItem('lang');
     if (savedLang === 'en') {
@@ -930,12 +959,23 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
         updateLanguage();
     }
     
-    // ========== 搜尋功能（僅支援 YouTube 和 SoundCloud） ==========
-    const searchBtn = document.getElementById('searchBtn');
-    const searchInput = document.getElementById('searchInput');
-    const searchPlatform = document.getElementById('searchPlatform');
-    const searchResults = document.getElementById('searchResults');
+    // ========== 根據格式顯示/隱藏平台 ==========
+    function updatePlatformsByFormat(format) {
+        const badges = document.querySelectorAll('#platformBadges .badge');
+        badges.forEach(badge => {
+            const supportsMp4 = badge.dataset.mp4 === 'true';
+            const supportsMp3 = badge.dataset.mp3 === 'true';
+            if (format === 'mp4' && supportsMp4) {
+                badge.style.display = 'inline-block';
+            } else if (format === 'mp3' && supportsMp3) {
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        });
+    }
     
+    // ========== 工具函數 ==========
     function formatDuration(seconds) {
         if (!seconds || seconds <= 0) return '0:00';
         const mins = Math.floor(seconds / 60);
@@ -943,22 +983,23 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     }
     
+    function formatNumber(num) {
+        if (!num) return '0';
+        return num.toLocaleString();
+    }
+    
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
-
-    function sanitizeFilename(name) {
-        return (name || '')
-            .trim()
-            .replace(/[\\/:*?"<>|]/g, '_')
-            .replace(/\s+/g, ' ')
-            .replace(/\./g, ' ')
-            .replace(/\.[0-9]+$/g, '')
-            .replace(/\.+$/g, '')
-            .slice(0, 120);
-    }
+    
+    // ========== 搜尋功能 ==========
+    const searchBtn = document.getElementById('searchBtn');
+    const searchInput = document.getElementById('searchInput');
+    const searchPlatform = document.getElementById('searchPlatform');
+    const searchResults = document.getElementById('searchResults');
+    const API_URL = window.location.origin;
     
     searchBtn?.addEventListener('click', async () => {
         const query = searchInput.value.trim();
@@ -970,7 +1011,6 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
         searchResults.style.display = 'block';
         searchResults.innerHTML = '<div style="padding: 20px; text-align: center;">🔍 搜尋中...</div>';
         
-        const API_URL = window.location.origin;
         try {
             const response = await fetch(`${API_URL}/api/search`, {
                 method: 'POST',
@@ -981,15 +1021,7 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
                     limit: 10
                 })
             });
-            const contentType = response.headers.get('content-type') || '';
-            if (!contentType.includes('application/json')) {
-                throw new Error('後端回傳格式錯誤，請重新啟動 LinkGrab');
-            }
-
             const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.error || '搜尋失敗');
-            }
             
             if (data.error) throw new Error(data.error);
             
@@ -1006,12 +1038,15 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
                 
                 document.querySelectorAll('.search-result-item').forEach(item => {
                     const url = item.dataset.url;
-                    item.querySelector('.search-result-use')?.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        document.getElementById('urlInput').value = url;
-                        searchResults.style.display = 'none';
-                        analyzeUrl();
-                    });
+                    const useBtn = item.querySelector('.search-result-use');
+                    if (useBtn) {
+                        useBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            document.getElementById('urlInput').value = url;
+                            searchResults.style.display = 'none';
+                            analyzeUrl();
+                        });
+                    }
                     item.addEventListener('click', () => {
                         document.getElementById('urlInput').value = url;
                         searchResults.style.display = 'none';
@@ -1036,7 +1071,7 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
         }
     });
     
-    // ========== 剪貼簿按鈕 ==========
+    // ========== 剪貼簿 ==========
     document.getElementById('pasteBtn')?.addEventListener('click', async () => {
         try {
             const text = await navigator.clipboard.readText();
@@ -1132,8 +1167,7 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
         saveHistory();
     });
     
-    // ========== 主要功能 ==========
-    const API_URL = window.location.origin;
+    // ========== 主要下載功能 ==========
     const analyzeBtn = document.getElementById('analyzeBtn');
     const urlInput = document.getElementById('urlInput');
     const step2 = document.getElementById('step2');
@@ -1178,15 +1212,6 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
         loadingDiv.style.display = show ? 'block' : 'none';
         if (text && loadingText) loadingText.textContent = text;
         else if (loadingText) loadingText.textContent = currentLang === 'zh' ? '處理中，請稍候...' : 'Processing, please wait...';
-        analyzeBtn.disabled = show;
-        downloadBtn.disabled = show;
-        analyzeBtn.style.opacity = show ? '0.7' : '';
-        downloadBtn.style.opacity = show ? '0.7' : '';
-    }
-    
-    function formatNumber(num) {
-        if (!num) return '0';
-        return num.toLocaleString();
     }
     
     async function analyzeUrl() {
@@ -1197,8 +1222,7 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
         }
         
         currentUrl = url;
-        showLoading(true, currentLang === 'zh' ? '正在分析連結...' : 'Analyzing link...');
-        await new Promise(requestAnimationFrame);
+        showLoading(true);
         step2.classList.remove('visible');
         step3.classList.remove('visible');
         filenameSection.classList.remove('active');
@@ -1248,8 +1272,7 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
             finalFilename = finalFilename + (selectedFormat === 'mp3' ? '.mp3' : '.mp4');
         }
         
-        showLoading(true, currentLang === 'zh' ? '正在下載檔案...' : 'Downloading file...');
-        await new Promise(requestAnimationFrame);
+        showLoading(true);
         try {
             const response = await fetch(`${API_URL}/api/download`, {
                 method: 'POST',
@@ -1258,7 +1281,7 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
                     url: currentUrl,
                     quality: selectedQuality,
                     format: selectedFormat,
-                    filename: finalFilename || sanitizeFilename(currentTitle)
+                    filename: finalFilename
                 })
             });
             if (!response.ok) {
@@ -1270,7 +1293,7 @@ document.write("<sc"+"ript type='text/javascript' src='" + scJsHost +
             const a = document.createElement('a');
             a.href = downloadUrl;
             
-            let filename = finalFilename || sanitizeFilename(currentTitle) || (selectedFormat === 'mp3' ? 'audio.mp3' : 'video.mp4');
+            let filename = finalFilename || (selectedFormat === 'mp3' ? 'audio.mp3' : 'video.mp4');
             const contentDisposition = response.headers.get('Content-Disposition');
             if (!finalFilename && contentDisposition) {
                 const match = contentDisposition.match(/filename\*=UTF-8''(.+)/);

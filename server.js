@@ -16,8 +16,20 @@ app.use(express.static('public'));
 if (!fs.existsSync('./downloads')) fs.mkdirSync('./downloads');
 if (!fs.existsSync('./temp')) fs.mkdirSync('./temp');
 
-// 直接使用系統命令（Python 環境已安裝）
-const ytDlpPath = 'yt-dlp';
+// 尋找 yt-dlp 路徑
+async function findYtDlp() {
+    const paths = ['yt-dlp', '/usr/local/bin/yt-dlp', '/usr/bin/yt-dlp'];
+    for (const p of paths) {
+        try {
+            await execPromise(`"${p}" --version`);
+            return p;
+        } catch(e) {}
+    }
+    return 'yt-dlp';
+}
+
+let ytDlpPath = 'yt-dlp';
+findYtDlp().then(p => { ytDlpPath = p; console.log(`✅ yt-dlp: ${p}`); });
 
 async function runYtDlp(args) {
     const command = `${ytDlpPath} --no-check-certificate ${args}`;
@@ -25,10 +37,12 @@ async function runYtDlp(args) {
     return await execPromise(command);
 }
 
+// 健康檢查
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: Date.now() });
 });
 
+// 影片資訊
 app.post('/api/info', async (req, res) => {
     const { url } = req.body;
     if (!url) return res.status(400).json({ error: '請提供網址' });
@@ -49,16 +63,19 @@ app.post('/api/info', async (req, res) => {
     }
 });
 
+// 搜尋 API（POST）
 app.post('/api/search', async (req, res) => {
     const { query, platform, limit } = req.body;
-    const searchLimit = limit || 10;
+    if (!query) return res.status(400).json({ error: '請輸入搜尋關鍵字' });
     
+    const searchLimit = limit || 10;
     let searchPrefix = '';
     if (platform === 'youtube') searchPrefix = `ytsearch${searchLimit}:`;
     else if (platform === 'soundcloud') searchPrefix = `scsearch${searchLimit}:`;
     else searchPrefix = `ytsearch${searchLimit}:`;
     
     const searchUrl = `${searchPrefix}${query}`;
+    console.log(`🔍 搜尋: ${searchUrl}`);
     
     try {
         const { stdout } = await runYtDlp(`-j --flat-playlist --no-warnings "${searchUrl}"`);
@@ -79,10 +96,12 @@ app.post('/api/search', async (req, res) => {
         
         res.json({ results });
     } catch (err) {
+        console.error('搜尋錯誤:', err.message);
         res.status(500).json({ error: err.message });
     }
 });
 
+// 下載
 app.post('/api/download', async (req, res) => {
     const { url, quality, format } = req.body;
     if (!url) return res.status(400).json({ error: '請提供網址' });

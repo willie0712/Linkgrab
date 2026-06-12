@@ -4,7 +4,8 @@
   "description": "LinkGrab 網頁版",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "install": "apt-get update && apt-get install -y yt-dlp ffmpeg || true"
   },
   "dependencies": {
     "express": "^4.18.2",

@@ -5,44 +5,39 @@ const util = require('util');
 const fs = require('fs');
 const path = require('path');
 
+// 將 Render 的 Python 本地路徑加入 PATH
+process.env.PATH += ':/opt/render/project/.local/bin';
+
 const execPromise = util.promisify(exec);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 中間件
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// 建立必要的資料夾
 if (!fs.existsSync('./downloads')) fs.mkdirSync('./downloads');
 
-// 尋找 yt-dlp 路徑
 async function findYtDlp() {
     const paths = [
         'yt-dlp',
         '/usr/local/bin/yt-dlp',
         '/usr/bin/yt-dlp',
-        '/app/.local/bin/yt-dlp', // Docker 或雲端環境
-        'C:\\Python39\\Scripts\\yt-dlp.exe', // Windows
+        '/app/.local/bin/yt-dlp',
+        '/opt/render/project/.local/bin/yt-dlp', // Render 的路徑
     ];
     for (const p of paths) {
         try {
             await execPromise(`"${p}" --version`);
             console.log(`✅ 找到 yt-dlp: ${p}`);
             return p;
-        } catch (e) {
-            // 繼續尋找下一個路徑
-        }
+        } catch (e) {}
     }
     throw new Error(
-        '❌ 未找到 yt-dlp，請執行 `pip install yt-dlp` 並確認路徑已加入 PATH。' +
-        '\nLinux/macOS: `pip3 install yt-dlp`' +
-        '\nWindows: `pip install yt-dlp` 或 `py -m pip install yt-dlp`'
+        '❌ 未找到 yt-dlp，請在 Render 的 Build Command 中加入 `pip install yt-dlp`。'
     );
 }
 
-// 全域變數：yt-dlp 路徑
 let ytDlpPath;
 findYtDlp()
     .then((p) => {
@@ -51,10 +46,9 @@ findYtDlp()
     })
     .catch((err) => {
         console.error(err.message);
-        process.exit(1); // 如果找不到 yt-dlp，直接退出程式
+        process.exit(1);
     });
 
-// 執行 yt-dlp 命令
 async function runYtDlp(args) {
     const command = `${ytDlpPath} --no-check-certificate ${args}`;
     console.log(`執行命令: ${command.substring(0, 150)}...`);
@@ -68,16 +62,13 @@ async function runYtDlp(args) {
     }
 }
 
-// 健康檢查
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: Date.now() });
 });
 
-// 獲取影片資訊
 app.post('/api/info', async (req, res) => {
     const { url } = req.body;
     if (!url) return res.status(400).json({ error: '請提供網址' });
-
     try {
         const stdout = await runYtDlp(`-j --no-warnings "${url}"`);
         const info = JSON.parse(stdout);
@@ -94,7 +85,6 @@ app.post('/api/info', async (req, res) => {
     }
 });
 
-// 下載影片或音頻
 app.post('/api/download', async (req, res) => {
     const { url, format = 'mp4', quality = 'high' } = req.body;
     if (!url) return res.status(400).json({ error: '請提供網址' });
@@ -108,7 +98,6 @@ app.post('/api/download', async (req, res) => {
         let filename;
         let formatCode;
 
-        // 先獲取影片資訊
         const info = JSON.parse(await runYtDlp(`-j --no-warnings "${url}"`));
         title = info.title || '下載檔案';
 
@@ -130,4 +119,27 @@ app.post('/api/download', async (req, res) => {
             } else {
                 formatCode = 'best[ext=mp4]/best';
             }
-            await runYtDlp(`-f "${formatCode}" --merge-output-format mp4 -o "${outputTemplate}" "\${url
+            await runYtDlp(`-f "${formatCode}" --merge-output-format mp4 -o "${outputTemplate}" "${url}"`);
+        }
+
+        const files = fs.readdirSync(tempDir);
+        const downloadedFile = files.find(f => f.endsWith(format === 'mp3' ? '.mp3' : '.mp4'));
+        if (!downloadedFile) throw new Error('下載失敗');
+
+        const filePath = path.join(tempDir, downloadedFile);
+        res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`);
+        res.setHeader('Content-Type', format === 'mp3' ? 'audio/mpeg' : 'video/mp4');
+
+        const fileStream = fs.createReadStream(filePath);
+        fileStream.pipe(res);
+        fileStream.on('end', () => {
+            setTimeout(() => fs.rm(tempDir, { recursive: true, force: true }, () => {}), 5000);
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`✅ LinkGrab 後端運行中: http://localhost:${PORT}`);
+});

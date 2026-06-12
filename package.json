@@ -1,31 +1,14 @@
 {
-  "name": "linkgrab-portable",
+  "name": "linkgrab-web",
   "version": "1.0.0",
-  "main": "main.js",
+  "description": "LinkGrab 網頁版",
+  "main": "server.js",
   "scripts": {
-    "start": "electron .",
-    "dist": "electron-builder"
-  },
-  "build": {
-    "appId": "com.linkgrab.portable",
-    "productName": "LinkGrab Portable",
-    "directories": {
-      "output": "dist"
-    },
-    "win": {
-      "target": "portable",
-      "icon": "icon.ico"
-    },
-    "extraResources": [
-      "yt-dlp.exe",
-      "ffmpeg.exe"
-    ]
+    "start": "node server.js",
+    "postinstall": "apt-get update && apt-get install -y yt-dlp ffmpeg"
   },
   "dependencies": {
-    "express": "^4.22.2"
-  },
-  "devDependencies": {
-    "electron": "^28.3.3",
-    "electron-builder": "^26.15.2"
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
   }
 }

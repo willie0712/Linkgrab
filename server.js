@@ -4,10 +4,11 @@ const { exec } = require('child_process');
 const util = require('util');
 const fs = require('fs');
 const path = require('path');
+const archiver = require('archiver');
 
 const execPromise = util.promisify(exec);
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -34,7 +35,8 @@ const ytDlpPath = findYtDlpPath();
 async function runYtDlp(args) {
     const command = `"${ytDlpPath}" --no-check-certificate ${args}`;
     console.log(`執行: ${command.substring(0, 150)}...`);
-    return await execPromise(command);
+    // 加大 buffer 到 100MB
+    return await execPromise(command, { maxBuffer: 100 * 1024 * 1024 });
 }
 
 app.get('/api/health', (req, res) => {
@@ -52,8 +54,8 @@ app.post('/api/info', async (req, res) => {
         
         if (isPlaylist) {
             console.log('📁 偵測到播放清單');
-            // 獲取清單內所有影片
-            const { stdout } = await runYtDlp(`-j --flat-playlist --no-warnings "${url}"`);
+            // 只抓前 200 個影片（避免 buffer 爆掉）
+            const { stdout } = await runYtDlp(`-j --flat-playlist --playlist-end 200 --no-warnings "${url}"`);
             const lines = stdout.trim().split('\n').filter(l => l.trim());
             const items = lines.map(line => {
                 try {
@@ -174,7 +176,9 @@ app.post('/api/download-playlist', async (req, res) => {
             const item = items[i];
             console.log(`📥 下載 ${i+1}/${items.length}: ${item.title}`);
             
-            const outputTemplate = path.join(downloadDir, `${item.title}.%(ext)s`);
+            // 清理檔名
+            const safeTitle = item.title.replace(/[<>:"/\\|?*]/g, '_');
+            const outputTemplate = path.join(downloadDir, `${safeTitle}.%(ext)s`);
             
             if (format === 'mp3') {
                 await runYtDlp(`-f bestaudio --extract-audio --audio-format mp3 --audio-quality 2 -o "${outputTemplate}" "${item.url}"`);
@@ -192,7 +196,6 @@ app.post('/api/download-playlist', async (req, res) => {
         }
         
         // 打包成 ZIP
-        const archiver = require('archiver');
         const zipPath = path.join(tempDir, zipFileName);
         const output = fs.createWriteStream(zipPath);
         const archive = archiver('zip', { zlib: { level: 9 } });

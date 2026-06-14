@@ -1,13 +1,37 @@
 {
-  "name": "linkgrab-web",
+  "name": "linkgrab-portable",
   "version": "1.0.0",
-  "description": "LinkGrab 網頁版",
-  "main": "server.js",
+  "description": "LinkGrab Portable App",
+  "main": "main.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.linkgrab.portable",
+    "productName": "LinkGrab Portable",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  },
+  "author": "zephyrus",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^26.15.2"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "express": "^4.19.2",
+    "yt-dlp-wrap": "^2.0.0"
   }
 }

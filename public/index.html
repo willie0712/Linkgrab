@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -71,7 +71,7 @@
             color: #333;
         }
 
-        .theme-btn:hover, .lang-btn:hover {
+        .theme-btn:hover, .lang-btn:hover, .menu-btn:hover {
             background: #e94560;
             color: white;
         }
@@ -90,11 +90,6 @@
         body.light .menu-btn {
             background: rgba(0,0,0,0.1);
             color: #333;
-        }
-
-        .menu-btn:hover {
-            background: #e94560;
-            color: white;
         }
 
         .menu-content {
@@ -176,6 +171,7 @@
             color: var(--badge-color);
             font-size: 14px;
             transition: all 0.2s;
+            cursor: default;
         }
 
         .badge:hover {
@@ -225,85 +221,6 @@
             margin-bottom: 15px;
         }
 
-        .search-section {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .search-input-wrapper {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        #searchInput {
-            flex: 2;
-            padding: 12px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            background: var(--card-bg);
-            color: var(--text-primary);
-            font-size: 14px;
-            outline: none;
-        }
-
-        #searchPlatform {
-            padding: 12px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            background: var(--card-bg);
-            color: var(--text-primary);
-            font-size: 14px;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .search-results {
-            margin-top: 15px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .search-result-item {
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .search-result-item:hover {
-            background: var(--info-bg);
-        }
-
-        .search-result-title {
-            font-weight: 500;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .search-result-meta {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .search-result-use {
-            padding: 6px 14px;
-            background: #e94560;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .search-result-use:hover {
-            opacity: 0.9;
-        }
-
         .url-input-wrapper {
             display: flex;
             gap: 12px;
@@ -325,22 +242,6 @@
             border-color: #e94560;
         }
 
-        .paste-btn {
-            padding: 14px 20px;
-            background: linear-gradient(135deg, #00b09b, #96c93d);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 16px;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-
-        .paste-btn:hover {
-            transform: translateY(-2px);
-        }
-
         .btn-primary {
             padding: 14px 28px;
             background: linear-gradient(135deg, #e94560, #1a1a2e);
@@ -357,80 +258,6 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             opacity: 0.9;
-        }
-
-        .filename-section {
-            margin-top: 15px;
-            display: none;
-        }
-
-        .filename-section.active {
-            display: block;
-        }
-
-        .filename-label {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        #filenameInput {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 14px;
-            background: var(--card-bg);
-            color: var(--text-primary);
-            outline: none;
-        }
-
-        .video-info {
-            margin: 20px 0;
-            padding: 15px;
-            background: var(--info-bg);
-            border-radius: 16px;
-            display: none;
-        }
-
-        .video-info-card {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .video-thumbnail {
-            width: 120px;
-            height: 68px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
-        .video-details {
-            flex: 1;
-        }
-
-        .video-title-large {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-            word-break: break-word;
-        }
-
-        .video-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .video-meta span {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
         }
 
         .format-options {
@@ -453,10 +280,6 @@
         .format-card.selected {
             border-color: #e94560;
             background: #fff0f2;
-        }
-
-        .format-card:hover {
-            transform: translateY(-2px);
         }
 
         .format-icon {
@@ -493,16 +316,11 @@
             padding: 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
         .quality-card.active {
             border-color: #e94560;
             background: #fff0f2;
-        }
-
-        .quality-card:hover {
-            transform: translateY(-2px);
         }
 
         .btn-download {
@@ -516,12 +334,6 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 10px;
-            transition: all 0.2s;
-        }
-
-        .btn-download:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
         }
 
         .loading {
@@ -577,10 +389,6 @@
             font-size: 12px;
         }
 
-        .clear-history:hover {
-            text-decoration: underline;
-        }
-
         .history-list {
             max-height: 200px;
             overflow-y: auto;
@@ -609,14 +417,6 @@
             text-overflow: ellipsis;
         }
 
-        .history-url {
-            font-size: 11px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
         .history-redownload {
             padding: 4px 10px;
             background: #e94560;
@@ -625,11 +425,6 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 11px;
-            transition: all 0.2s;
-        }
-
-        .history-redownload:hover {
-            opacity: 0.9;
         }
 
         .footer {
@@ -637,17 +432,6 @@
             margin-top: 30px;
             color: var(--footer-color);
             font-size: 12px;
-        }
-
-        .stats-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: #a0c0e8;
-            text-decoration: none;
-        }
-
-        .stats-link:hover {
-            color: #e94560;
         }
 
         .step {
@@ -659,60 +443,18 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 16px;
-            }
-            .header h1 {
-                font-size: 32px;
-            }
-            .card {
-                padding: 24px 20px;
-            }
-            .step.visible {
-                flex-direction: column;
-            }
-            .step-number {
-                width: 32px;
-                height: 32px;
-                font-size: 14px;
-            }
-            .step-title {
-                font-size: 18px;
-            }
-            .search-input-wrapper {
-                flex-wrap: wrap;
-            }
             .url-input-wrapper {
                 flex-wrap: wrap;
             }
-            .paste-btn, .btn-primary {
+            .btn-primary {
                 white-space: normal;
             }
-            .format-options {
-                flex-direction: column;
-            }
-            .quality-options {
+            .format-options, .quality-options {
                 flex-direction: column;
             }
             .menu-btn, .theme-btn, .lang-btn {
                 padding: 6px 12px;
                 font-size: 14px;
-            }
-            .badge {
-                padding: 6px 12px;
-                font-size: 11px;
-            }
-            .video-info-card {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .video-thumbnail {
-                width: 100%;
-                height: auto;
-                aspect-ratio: 16/9;
-            }
-            .video-meta {
-                gap: 8px;
             }
         }
     </style>
@@ -724,7 +466,7 @@
     <button class="theme-btn" id="themeToggle">🌓 深色/淺色</button>
     <button class="menu-btn">☰ 選單</button>
     <div class="menu-content">
-        <a href="mailto:contact.website676@gmail.com" id="contactLink">📧 聯絡我們</a>
+        <a href="#" id="contactBtn">📧 聯絡我們</a>
         <a href="#" id="faqBtn">❓ 常見問題</a>
         <a href="#" id="tutorialBtn">📖 使用教學</a>
         <a href="https://drive.google.com/uc?export=download&id=1XqgBpflk0VRXWwWYqQpWrkyLbIxt_uus" id="downloadLink">💻 電腦版下載</a>
@@ -751,44 +493,11 @@
         <div class="step visible" id="step1">
             <div class="step-number">1</div>
             <div class="step-content">
-                <div class="step-title" id="step1Title">貼上連結</div>
-                <div class="step-desc" id="step1Desc">支援 YouTube、Facebook、TikTok、Instagram、SoundCloud、Twitter、Vimeo</div>
-                
-                <div class="search-section">
-                    <div class="search-input-wrapper">
-                        <input type="text" id="searchInput" placeholder="搜尋影片或音樂...">
-                        <select id="searchPlatform">
-                            <option value="youtube">🎬 YouTube</option>
-                            <option value="soundcloud">🎧 SoundCloud</option>
-                        </select>
-                        <button id="searchBtn" class="btn-primary">🔍 搜尋</button>
-                    </div>
-                    <div id="searchResults" class="search-results" style="display: none;"></div>
-                </div>
-
+                <div class="step-title">貼上連結</div>
+                <div class="step-desc">支援 YouTube、Facebook、TikTok、Instagram、SoundCloud、Twitter、Vimeo</div>
                 <div class="url-input-wrapper">
-                    <input type="text" id="urlInput" placeholder="或直接貼上影片或音樂連結...">
-                    <button id="pasteBtn" class="paste-btn">📋 貼上</button>
-                    <button id="analyzeBtn" class="btn-primary" id="analyzeBtnText">分析</button>
-                </div>
-                <div class="filename-section" id="filenameSection">
-                    <div class="filename-label" id="filenameLabel">📝 自訂檔案名稱（留空使用原始名稱）</div>
-                    <input type="text" id="filenameInput" placeholder="例如：我的影片">
-                </div>
-            </div>
-        </div>
-
-        <div class="video-info" id="videoInfo">
-            <div class="video-info-card">
-                <img id="videoThumbnail" src="" alt="縮圖" class="video-thumbnail">
-                <div class="video-details">
-                    <div class="video-title-large" id="videoTitleLarge"></div>
-                    <div class="video-meta">
-                        <span>👤 <span id="videoUploader"></span></span>
-                        <span>👁️ <span id="videoViews"></span> 次觀看</span>
-                        <span>⏱️ <span id="videoDuration"></span></span>
-                        <span>👍 <span id="videoLikes"></span></span>
-                    </div>
+                    <input type="text" id="urlInput" placeholder="貼上影片或音樂連結...">
+                    <button id="analyzeBtn" class="btn-primary">分析</button>
                 </div>
             </div>
         </div>
@@ -796,23 +505,23 @@
         <div class="step" id="step2">
             <div class="step-number">2</div>
             <div class="step-content">
-                <div class="step-title" id="step2Title">選擇格式</div>
+                <div class="step-title">選擇格式</div>
                 <div class="format-options">
                     <div class="format-card" data-format="mp4">
                         <div class="format-icon">🎬</div>
-                        <div class="format-name" id="formatVideo">影片 MP4</div>
+                        <div class="format-name">影片 MP4</div>
                     </div>
                     <div class="format-card" data-format="mp3">
                         <div class="format-icon">🎵</div>
-                        <div class="format-name" id="formatAudio">音樂 MP3</div>
+                        <div class="format-name">音樂 MP3</div>
                     </div>
                 </div>
                 <div class="quality-section" id="qualitySection">
-                    <div class="quality-label" id="qualityLabel">畫質</div>
+                    <div class="quality-label">畫質</div>
                     <div class="quality-options">
-                        <div class="quality-card" data-quality="high" id="qualityHigh">1080p</div>
-                        <div class="quality-card" data-quality="medium" id="qualityMedium">720p</div>
-                        <div class="quality-card" data-quality="low" id="qualityLow">480p</div>
+                        <div class="quality-card" data-quality="high">1080p</div>
+                        <div class="quality-card" data-quality="medium">720p</div>
+                        <div class="quality-card" data-quality="low">480p</div>
                     </div>
                 </div>
             </div>
@@ -821,98 +530,63 @@
         <div class="step" id="step3">
             <div class="step-number">3</div>
             <div class="step-content">
-                <button id="downloadBtn" class="btn-download" id="downloadBtnText">⬇️ 下載</button>
+                <button id="downloadBtn" class="btn-download">⬇️ 下載</button>
             </div>
         </div>
 
         <div id="loading" class="loading">
             <div class="spinner"></div>
-            <p id="loadingText">處理中，請稍候...</p>
+            <p>處理中，請稍候...</p>
         </div>
 
         <div id="errorMsg" class="error-message"></div>
 
         <div class="history-section" id="historySection">
             <div class="history-title">
-                <span id="historyTitle">📋 下載記錄</span>
+                <span>📋 下載記錄</span>
                 <button class="clear-history" id="clearHistory">清空</button>
             </div>
             <div class="history-list" id="historyList">
-                <div style="color: var(--text-secondary); text-align: center; padding: 20px;" id="noHistoryText">暫無記錄</div>
+                <div style="color: var(--text-secondary); text-align: center; padding: 20px;">暫無記錄</div>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        <p id="footerWarning">⚠️ 請遵守版權法規，僅供個人合理使用</p>
+        <p>⚠️ 請遵守版權法規，僅供個人合理使用</p>
         <div style="margin-top: 10px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
             <span>🔓 100% 乾淨</span>
             <span>📖 開源免費</span>
             <span>🚫 無廣告</span>
             <span>🛡️ 純本機執行</span>
         </div>
-        <a href="https://statcounter.com/p13290772/?guest=1" target="_blank" class="stats-link">📊 網站統計</a>
+        <a href="https://statcounter.com/p13290772/?guest=1" target="_blank" class="stats-link" style="display: inline-block; margin-top: 10px;">📊 網站統計</a>
     </div>
 </div>
 
 <script>
-    // ========== 多語言 ==========
+    // ========== 多語言切換 ==========
     let currentLang = 'zh';
-    
     const translations = {
         zh: {
-            siteTitle: 'LinkGrab',
-            siteDesc: '貼上連結，快速下載影片與音樂',
-            step1Title: '貼上連結',
-            step1Desc: '支援 YouTube、Facebook、TikTok、Instagram、SoundCloud、Twitter、Vimeo',
-            analyzeBtn: '分析',
-            step2Title: '選擇格式',
-            formatVideo: '影片 MP4',
-            formatAudio: '音樂 MP3',
-            qualityLabel: '畫質',
-            qualityHigh: '1080p',
-            qualityMedium: '720p',
-            qualityLow: '480p',
-            downloadBtn: '⬇️ 下載',
-            filenameLabel: '📝 自訂檔案名稱（留空使用原始名稱）',
-            historyTitle: '📋 下載記錄',
-            clearHistory: '清空',
-            noHistory: '暫無記錄',
+            siteTitle: 'LinkGrab', siteDesc: '貼上連結，快速下載影片與音樂',
+            step1Title: '貼上連結', step1Desc: '支援 YouTube、Facebook、TikTok、Instagram、SoundCloud、Twitter、Vimeo',
+            analyzeBtn: '分析', step2Title: '選擇格式',
+            formatVideo: '影片 MP4', formatAudio: '音樂 MP3',
+            qualityLabel: '畫質', qualityHigh: '1080p', qualityMedium: '720p', qualityLow: '480p',
+            downloadBtn: '⬇️ 下載', loadingText: '處理中，請稍候...',
             footerWarning: '⚠️ 請遵守版權法規，僅供個人合理使用',
-            contact: '📧 聯絡我們',
-            faq: '❓ 常見問題',
-            tutorial: '📖 使用教學',
-            downloadPc: '💻 電腦版下載',
-            pasteBtn: '📋 貼上',
-            loadingText: '處理中，請稍候...',
-            searchPlaceholder: '搜尋影片或音樂...'
+            contact: '📧 聯絡我們', faq: '❓ 常見問題', tutorial: '📖 使用教學', downloadPc: '💻 電腦版下載'
         },
         en: {
-            siteTitle: 'LinkGrab',
-            siteDesc: 'Paste link, quickly download videos and music',
-            step1Title: 'Paste Link',
-            step1Desc: 'Supports YouTube, Facebook, TikTok, Instagram, SoundCloud, Twitter, Vimeo',
-            analyzeBtn: 'Analyze',
-            step2Title: 'Select Format',
-            formatVideo: 'Video MP4',
-            formatAudio: 'Music MP3',
-            qualityLabel: 'Quality',
-            qualityHigh: '1080p',
-            qualityMedium: '720p',
-            qualityLow: '480p',
-            downloadBtn: '⬇️ Download',
-            filenameLabel: '📝 Custom filename (leave empty for original)',
-            historyTitle: '📋 Download History',
-            clearHistory: 'Clear',
-            noHistory: 'No records',
+            siteTitle: 'LinkGrab', siteDesc: 'Paste link, quickly download videos and music',
+            step1Title: 'Paste Link', step1Desc: 'Supports YouTube, Facebook, TikTok, Instagram, SoundCloud, Twitter, Vimeo',
+            analyzeBtn: 'Analyze', step2Title: 'Select Format',
+            formatVideo: 'Video MP4', formatAudio: 'Music MP3',
+            qualityLabel: 'Quality', qualityHigh: '1080p', qualityMedium: '720p', qualityLow: '480p',
+            downloadBtn: '⬇️ Download', loadingText: 'Processing, please wait...',
             footerWarning: '⚠️ Please comply with copyright laws for personal fair use only',
-            contact: '📧 Contact Us',
-            faq: '❓ FAQ',
-            tutorial: '📖 Tutorial',
-            downloadPc: '💻 PC Download',
-            pasteBtn: '📋 Paste',
-            loadingText: 'Processing, please wait...',
-            searchPlaceholder: 'Search videos or music...'
+            contact: '📧 Contact Us', faq: '❓ FAQ', tutorial: '📖 Tutorial', downloadPc: '💻 PC Download'
         }
     };
     
@@ -920,10 +594,10 @@
         const t = translations[currentLang];
         document.getElementById('siteTitle').innerText = t.siteTitle;
         document.getElementById('siteDesc').innerText = t.siteDesc;
-        document.getElementById('step1Title').innerText = t.step1Title;
-        document.getElementById('step1Desc').innerText = t.step1Desc;
+        document.querySelector('#step1 .step-title').innerText = t.step1Title;
+        document.querySelector('#step1 .step-desc').innerText = t.step1Desc;
         document.getElementById('analyzeBtn').innerText = t.analyzeBtn;
-        document.getElementById('step2Title').innerText = t.step2Title;
+        document.querySelector('#step2 .step-title').innerText = t.step2Title;
         document.getElementById('formatVideo').innerText = t.formatVideo;
         document.getElementById('formatAudio').innerText = t.formatAudio;
         document.getElementById('qualityLabel').innerText = t.qualityLabel;
@@ -931,217 +605,95 @@
         document.getElementById('qualityMedium').innerText = t.qualityMedium;
         document.getElementById('qualityLow').innerText = t.qualityLow;
         document.getElementById('downloadBtn').innerText = t.downloadBtn;
-        document.getElementById('filenameLabel').innerText = t.filenameLabel;
-        document.getElementById('historyTitle').innerText = t.historyTitle;
-        document.getElementById('clearHistory').innerText = t.clearHistory;
-        document.getElementById('footerWarning').innerText = t.footerWarning;
-        document.getElementById('contactLink').innerHTML = t.contact;
+        document.getElementById('loading').querySelector('p').innerText = t.loadingText;
+        document.querySelector('.footer p').innerHTML = t.footerWarning;
+        document.getElementById('contactBtn').innerHTML = t.contact;
         document.getElementById('faqBtn').innerHTML = t.faq;
         document.getElementById('tutorialBtn').innerHTML = t.tutorial;
         document.getElementById('downloadLink').innerHTML = t.downloadPc;
-        document.getElementById('pasteBtn').innerHTML = t.pasteBtn;
-        document.getElementById('searchInput').placeholder = t.searchPlaceholder;
-        if (document.getElementById('noHistoryText')) {
-            document.getElementById('noHistoryText').innerText = t.noHistory;
-        }
-        document.getElementById('loadingText').innerText = t.loadingText;
     }
     
-    document.getElementById('langToggle')?.addEventListener('click', () => {
+    document.getElementById('langToggle').addEventListener('click', () => {
         currentLang = currentLang === 'zh' ? 'en' : 'zh';
         updateLanguage();
         localStorage.setItem('lang', currentLang);
     });
     
     const savedLang = localStorage.getItem('lang');
-    if (savedLang === 'en') {
-        currentLang = 'en';
-        updateLanguage();
-    }
-    
-    // ========== 根據格式顯示/隱藏平台 ==========
-    function updatePlatformsByFormat(format) {
-        const badges = document.querySelectorAll('#platformBadges .badge');
-        badges.forEach(badge => {
-            const supportsMp4 = badge.dataset.mp4 === 'true';
-            const supportsMp3 = badge.dataset.mp3 === 'true';
-            if (format === 'mp4' && supportsMp4) {
-                badge.style.display = 'inline-block';
-            } else if (format === 'mp3' && supportsMp3) {
-                badge.style.display = 'inline-block';
-            } else {
-                badge.style.display = 'none';
-            }
-        });
-    }
-    
-    // ========== 工具函數 ==========
-    function formatDuration(seconds) {
-        if (!seconds || seconds <= 0) return '0:00';
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-    }
-    
-    function formatNumber(num) {
-        if (!num) return '0';
-        return num.toLocaleString();
-    }
-    
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-    
-    // ========== 搜尋功能 ==========
-    const searchBtn = document.getElementById('searchBtn');
-    const searchInput = document.getElementById('searchInput');
-    const searchPlatform = document.getElementById('searchPlatform');
-    const searchResults = document.getElementById('searchResults');
-    const API_URL = window.location.origin;
-    
-    searchBtn?.addEventListener('click', async () => {
-        const query = searchInput.value.trim();
-        if (!query) {
-            alert(currentLang === 'zh' ? '請輸入搜尋關鍵字' : 'Please enter search keyword');
-            return;
-        }
-        
-        searchResults.style.display = 'block';
-        searchResults.innerHTML = '<div style="padding: 20px; text-align: center;">🔍 搜尋中...</div>';
-        
-        try {
-            const response = await fetch(`${API_URL}/api/search`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    query: query,
-                    platform: searchPlatform.value,
-                    limit: 10
-                })
-            });
-            const data = await response.json();
-            
-            if (data.error) throw new Error(data.error);
-            
-            if (data.results && data.results.length > 0) {
-                searchResults.innerHTML = data.results.map(item => `
-                    <div class="search-result-item" data-url="${escapeHtml(item.url)}">
-                        <div style="flex: 1;">
-                            <div class="search-result-title">${escapeHtml(item.title)}</div>
-                            <div class="search-result-meta">${escapeHtml(item.uploader || '未知')} | ⏱️ ${formatDuration(item.duration)}</div>
-                        </div>
-                        <button class="search-result-use">📥 使用</button>
-                    </div>
-                `).join('');
-                
-                document.querySelectorAll('.search-result-item').forEach(item => {
-                    const url = item.dataset.url;
-                    const useBtn = item.querySelector('.search-result-use');
-                    if (useBtn) {
-                        useBtn.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            document.getElementById('urlInput').value = url;
-                            searchResults.style.display = 'none';
-                            analyzeUrl();
-                        });
-                    }
-                    item.addEventListener('click', () => {
-                        document.getElementById('urlInput').value = url;
-                        searchResults.style.display = 'none';
-                        analyzeUrl();
-                    });
-                });
-            } else {
-                searchResults.innerHTML = '<div style="padding: 20px; text-align: center;">😔 沒有找到結果，請嘗試其他關鍵字</div>';
-            }
-        } catch (err) {
-            searchResults.innerHTML = `<div style="padding: 20px; text-align: center;">❌ 搜尋失敗：${err.message}</div>`;
-        }
-    });
-    
-    searchInput?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') searchBtn.click();
-    });
-    
-    document.addEventListener('click', (e) => {
-        if (!searchResults?.contains(e.target) && e.target !== searchBtn && e.target !== searchInput) {
-            if (searchResults) searchResults.style.display = 'none';
-        }
-    });
-    
-    // ========== 剪貼簿 ==========
-    document.getElementById('pasteBtn')?.addEventListener('click', async () => {
-        try {
-            const text = await navigator.clipboard.readText();
-            document.getElementById('urlInput').value = text;
-        } catch (e) {
-            alert(currentLang === 'zh' ? '無法讀取剪貼簿，請手動貼上' : 'Cannot read clipboard, please paste manually');
-        }
-    });
-    
-    // ========== 自訂檔名 ==========
-    let customFilename = '';
-    document.getElementById('filenameInput')?.addEventListener('input', (e) => {
-        customFilename = e.target.value;
-    });
+    if (savedLang === 'en') { currentLang = 'en'; updateLanguage(); }
     
     // ========== 深色模式 ==========
     const themeToggle = document.getElementById('themeToggle');
-    if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light');
-    }
-    themeToggle?.addEventListener('click', () => {
+    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
+    themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('light');
-        if (document.body.classList.contains('light')) {
-            localStorage.setItem('theme', 'light');
+        localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    });
+    
+    // ========== 聯絡我們 ==========
+    document.getElementById('contactBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        const email = 'contact.website676@gmail.com';
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // 手機：直接開啟郵件 App
+            window.location.href = `mailto:${email}?subject=LinkGrab 意見回饋&body=您好，我想詢問關於 LinkGrab 的問題：%0A%0A`;
         } else {
-            localStorage.setItem('theme', 'dark');
+            // 電腦：彈出對話框，可選擇複製信箱或開啟郵件軟體
+            const action = confirm(
+                `📧 聯絡我們\n\n${'─'.repeat(30)}\n\n📮 電子信箱：\n${email}\n\n${'─'.repeat(30)}\n\n✅ 按下「確定」：開啟郵件軟體\n📋 按下「取消」：複製信箱到剪貼簿`
+            );
+            
+            if (action) {
+                window.location.href = `mailto:${email}?subject=LinkGrab 意見回饋&body=您好，我想詢問關於 LinkGrab 的問題：%0A%0A`;
+            } else {
+                navigator.clipboard.writeText(email).then(() => {
+                    alert('✅ 信箱已複製！\n\n你可以貼到 Gmail、Outlook 或其他郵件 App 中寄信。');
+                }).catch(() => {
+                    alert(`📧 請手動複製信箱：\n\n${email}`);
+                });
+            }
         }
     });
     
-    // ========== 顯示檔名輸入框 ==========
-    const filenameSection = document.getElementById('filenameSection');
-    function showFilenameSection() {
-        filenameSection.classList.add('active');
-    }
+    // ========== 常見問題與教學 ==========
+    document.getElementById('faqBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        alert(currentLang === 'zh' 
+            ? '❓ 常見問題\n\n1. 無法下載？\n   請確認連結正確，或改用電腦版。\n\n2. 下載速度慢？\n   影片大小影響速度，請耐心等待。\n\n3. 支援哪些平台？\n   YouTube、Facebook、TikTok、Instagram、SoundCloud、Twitter、Vimeo'
+            : '❓ FAQ\n\n1. Cannot download?\n   Please check the URL or try PC version.\n\n2. Slow download speed?\n   Video size affects speed, please wait.\n\n3. Supported platforms?\n   YouTube, Facebook, TikTok, Instagram, SoundCloud, Twitter, Vimeo');
+    });
+    
+    document.getElementById('tutorialBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        alert(currentLang === 'zh'
+            ? '📖 使用教學\n\n1. 貼上影片或音樂連結\n2. 點擊「分析」\n3. 選擇格式（MP4 影片 / MP3 音樂）\n4. 選擇畫質\n5. 點擊「下載」'
+            : '📖 Tutorial\n\n1. Paste video or music link\n2. Click "Analyze"\n3. Select format (MP4 video / MP3 audio)\n4. Select quality\n5. Click "Download"');
+    });
     
     // ========== 下載記錄 ==========
     let downloadHistory = [];
-    
     function loadHistory() {
         const saved = localStorage.getItem('linkgrab_history');
-        if (saved) {
-            downloadHistory = JSON.parse(saved);
-            renderHistory();
-        }
+        if (saved) { downloadHistory = JSON.parse(saved); renderHistory(); }
     }
-    
     function saveHistory() {
         localStorage.setItem('linkgrab_history', JSON.stringify(downloadHistory.slice(0, 20)));
         renderHistory();
     }
-    
     function addToHistory(title, url) {
-        downloadHistory.unshift({
-            title: title || '未知標題',
-            url: url,
-            time: new Date().toLocaleString()
-        });
+        downloadHistory.unshift({ title: title || '未知標題', url: url, time: new Date().toLocaleString() });
         if (downloadHistory.length > 20) downloadHistory.pop();
         saveHistory();
     }
-    
     function renderHistory() {
         const historyList = document.getElementById('historyList');
         if (!historyList) return;
-        
         if (downloadHistory.length === 0) {
-            historyList.innerHTML = `<div style="color: var(--text-secondary); text-align: center; padding: 20px;">${currentLang === 'zh' ? '暫無記錄' : 'No records'}</div>`;
+            historyList.innerHTML = '<div style="color: var(--text-secondary); text-align: center; padding: 20px;">暫無記錄</div>';
             return;
         }
-        
         historyList.innerHTML = downloadHistory.map(item => `
             <div class="history-item">
                 <div class="history-info">
@@ -1149,25 +701,26 @@
                     <div class="history-url">${escapeHtml(item.url.substring(0, 60))}${item.url.length > 60 ? '...' : ''}</div>
                     <div style="font-size: 10px; color: var(--text-secondary);">${item.time}</div>
                 </div>
-                <button class="history-redownload" data-url="${escapeHtml(item.url)}">${currentLang === 'zh' ? '重新下載' : 'Redownload'}</button>
+                <button class="history-redownload" data-url="${escapeHtml(item.url)}">重新下載</button>
             </div>
         `).join('');
-        
         document.querySelectorAll('.history-redownload').forEach(btn => {
             btn.addEventListener('click', () => {
-                const url = btn.dataset.url;
-                document.getElementById('urlInput').value = url;
+                document.getElementById('urlInput').value = btn.dataset.url;
                 analyzeUrl();
             });
         });
     }
-    
-    document.getElementById('clearHistory')?.addEventListener('click', () => {
-        downloadHistory = [];
-        saveHistory();
-    });
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    document.getElementById('clearHistory')?.addEventListener('click', () => { downloadHistory = []; saveHistory(); });
+    loadHistory();
     
     // ========== 主要下載功能 ==========
+    const API_URL = window.location.origin;
     const analyzeBtn = document.getElementById('analyzeBtn');
     const urlInput = document.getElementById('urlInput');
     const step2 = document.getElementById('step2');
@@ -1175,9 +728,7 @@
     const qualitySection = document.getElementById('qualitySection');
     const downloadBtn = document.getElementById('downloadBtn');
     const loadingDiv = document.getElementById('loading');
-    const loadingText = document.getElementById('loadingText');
     const errorMsg = document.getElementById('errorMsg');
-    const videoInfo = document.getElementById('videoInfo');
     
     let selectedFormat = 'mp4';
     let selectedQuality = 'high';
@@ -1190,7 +741,6 @@
             card.classList.add('selected');
             selectedFormat = card.dataset.format;
             qualitySection.style.display = selectedFormat === 'mp3' ? 'none' : 'block';
-            updatePlatformsByFormat(selectedFormat);
         });
     });
     
@@ -1208,138 +758,52 @@
         setTimeout(() => errorMsg.style.display = 'none', 5000);
     }
     
-    function showLoading(show, text = '') {
+    function showLoading(show) {
         loadingDiv.style.display = show ? 'block' : 'none';
-        if (text && loadingText) loadingText.textContent = text;
-        else if (loadingText) loadingText.textContent = currentLang === 'zh' ? '處理中，請稍候...' : 'Processing, please wait...';
     }
     
     async function analyzeUrl() {
         const url = urlInput.value.trim();
-        if (!url) {
-            showError(currentLang === 'zh' ? '請輸入網址' : 'Please enter URL');
-            return;
-        }
-        
+        if (!url) { showError('請輸入網址'); return; }
         currentUrl = url;
         showLoading(true);
-        step2.classList.remove('visible');
-        step3.classList.remove('visible');
-        filenameSection.classList.remove('active');
-        videoInfo.style.display = 'none';
-        
+        step2.style.display = 'none';
+        step3.style.display = 'none';
         try {
-            const response = await fetch(`${API_URL}/api/info`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url })
-            });
+            const response = await fetch(`${API_URL}/api/info`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
             const data = await response.json();
             if (data.error) throw new Error(data.error);
-            
-            currentTitle = data.title || '影片';
-            
-            if (data.thumbnail) {
-                document.getElementById('videoThumbnail').src = data.thumbnail;
-                document.getElementById('videoTitleLarge').innerText = data.title;
-                document.getElementById('videoUploader').innerText = data.uploader || '未知';
-                document.getElementById('videoViews').innerText = formatNumber(data.view_count);
-                document.getElementById('videoLikes').innerText = formatNumber(data.like_count);
-                document.getElementById('videoDuration').innerText = formatDuration(data.duration);
-                videoInfo.style.display = 'block';
-            }
-            
-            step2.classList.add('visible');
-            step3.classList.add('visible');
-            filenameSection.classList.add('active');
-            
+            currentTitle = data.title;
+            step2.style.display = 'flex';
+            step3.style.display = 'block';
             addToHistory(currentTitle, url);
-        } catch (err) {
-            showError(err.message);
-        } finally {
-            showLoading(false);
-        }
+        } catch (err) { showError(err.message); } finally { showLoading(false); }
     }
     
     async function download() {
-        if (!currentUrl) {
-            showError(currentLang === 'zh' ? '請先分析網址' : 'Please analyze URL first');
-            return;
-        }
-        
-        let finalFilename = customFilename.trim();
-        if (finalFilename) {
-            finalFilename = finalFilename + (selectedFormat === 'mp3' ? '.mp3' : '.mp4');
-        }
-        
+        if (!currentUrl) { showError('請先分析網址'); return; }
         showLoading(true);
         try {
-            const response = await fetch(`${API_URL}/api/download`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    url: currentUrl,
-                    quality: selectedQuality,
-                    format: selectedFormat,
-                    filename: finalFilename
-                })
-            });
-            if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.error || '下載失敗');
-            }
+            const response = await fetch(`${API_URL}/api/download`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: currentUrl, quality: selectedQuality, format: selectedFormat }) });
+            if (!response.ok) { const err = await response.json(); throw new Error(err.error || '下載失敗'); }
             const blob = await response.blob();
             const downloadUrl = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = downloadUrl;
-            
-            let filename = finalFilename || (selectedFormat === 'mp3' ? 'audio.mp3' : 'video.mp4');
+            let filename = selectedFormat === 'mp3' ? 'audio.mp3' : 'video.mp4';
             const contentDisposition = response.headers.get('Content-Disposition');
-            if (!finalFilename && contentDisposition) {
-                const match = contentDisposition.match(/filename\*=UTF-8''(.+)/);
-                if (match) filename = decodeURIComponent(match[1]);
-            }
-            
+            if (contentDisposition) { const match = contentDisposition.match(/filename\*=UTF-8''(.+)/); if (match) filename = decodeURIComponent(match[1]); }
             a.download = filename;
             a.click();
             URL.revokeObjectURL(downloadUrl);
-        } catch (err) {
-            showError(err.message);
-        } finally {
-            showLoading(false);
-        }
+        } catch (err) { showError(err.message); } finally { showLoading(false); }
     }
     
     analyzeBtn.addEventListener('click', analyzeUrl);
     downloadBtn.addEventListener('click', download);
-    urlInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') analyzeUrl();
-    });
-    
+    urlInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') analyzeUrl(); });
     document.querySelector('.format-card').classList.add('selected');
     document.querySelector('.quality-card').classList.add('active');
-    qualitySection.style.display = 'block';
-    updatePlatformsByFormat('mp4');
-    
-    loadHistory();
-    
-    document.getElementById('faqBtn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (currentLang === 'zh') {
-            alert('❓ 常見問題\n\n1. 無法下載？\n   請確認連結正確，或改用電腦版。\n\n2. 下載速度慢？\n   影片大小影響速度，請耐心等待。\n\n3. 支援哪些平台？\n   YouTube、Facebook、TikTok、Instagram、SoundCloud、Twitter、Vimeo');
-        } else {
-            alert('❓ FAQ\n\n1. Cannot download?\n   Please check the URL or try PC version.\n\n2. Slow download speed?\n   Video size affects speed, please wait.\n\n3. Supported platforms?\n   YouTube, Facebook, TikTok, Instagram, SoundCloud, Twitter, Vimeo');
-        }
-    });
-    
-    document.getElementById('tutorialBtn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (currentLang === 'zh') {
-            alert('📖 使用教學\n\n1. 貼上影片或音樂連結\n2. 點擊「分析」\n3. 選擇格式（MP4 影片 / MP3 音樂）\n4. 選擇畫質\n5. 點擊「下載」');
-        } else {
-            alert('📖 Tutorial\n\n1. Paste video or music link\n2. Click "Analyze"\n3. Select format (MP4 video / MP3 audio)\n4. Select quality\n5. Click "Download"');
-        }
-    });
 </script>
 
 </body>

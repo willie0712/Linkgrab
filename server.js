@@ -41,23 +41,70 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: Date.now() });
 });
 
+// ========== 影片/播放清單資訊 API ==========
 app.post('/api/info', async (req, res) => {
     const { url } = req.body;
     if (!url) return res.status(400).json({ error: '請提供網址' });
+    
     try {
-        const { stdout } = await runYtDlp(`-j --no-warnings "${url}"`);
-        const info = JSON.parse(stdout);
-        res.json({ type: 'video', title: info.title || '影片' });
+        // 檢查是否為播放清單
+        const isPlaylist = url.includes('list=') || url.includes('playlist') || url.includes('&list=');
+        
+        if (isPlaylist) {
+            console.log('📁 偵測到播放清單');
+            // 獲取清單內所有影片
+            const { stdout } = await runYtDlp(`-j --flat-playlist --no-warnings "${url}"`);
+            const lines = stdout.trim().split('\n').filter(l => l.trim());
+            const items = lines.map(line => {
+                try {
+                    const info = JSON.parse(line);
+                    return {
+                        id: info.id,
+                        title: info.title,
+                        duration: info.duration || 0,
+                        url: `https://youtube.com/watch?v=${info.id}`
+                    };
+                } catch(e) { 
+                    return null; 
+                }
+            }).filter(v => v !== null);
+            
+            // 獲取播放清單標題
+            let playlistTitle = '播放清單';
+            try {
+                const titleCmd = await runYtDlp(`--get-title --no-warnings "${url}"`);
+                playlistTitle = titleCmd.stdout.trim().replace(/[<>:"/\\|?*]/g, '_');
+            } catch(e) {}
+            
+            return res.json({ 
+                type: 'playlist', 
+                title: playlistTitle,
+                count: items.length,
+                items: items 
+            });
+        } else {
+            // 單一影片
+            console.log('🎬 偵測到單一影片');
+            const { stdout } = await runYtDlp(`-j --no-warnings "${url}"`);
+            const info = JSON.parse(stdout);
+            return res.json({ 
+                type: 'video', 
+                title: info.title || '影片',
+                thumbnail: info.thumbnail || '',
+                duration: info.duration || 0,
+                uploader: info.uploader || '未知'
+            });
+        }
     } catch (err) {
+        console.error('解析錯誤:', err.message);
         res.status(500).json({ error: err.message });
     }
 });
 
+// ========== 下載單一影片 ==========
 app.post('/api/download', async (req, res) => {
     const { url, quality, format } = req.body;
     if (!url) return res.status(400).json({ error: '請提供網址' });
-
-    console.log(`📍 下載: ${url}`);
 
     try {
         const { stdout } = await runYtDlp(`--get-title --no-warnings "${url}"`);
@@ -74,15 +121,10 @@ app.post('/api/download', async (req, res) => {
         } else {
             filename = `${title}.mp4`;
             let formatCode;
-
-            // Instagram：一定不能用固定ID，要讓 yt-dlp 自動選
+            
             if (url.includes('instagram.com')) {
-                // 直接抓最佳品質，讓 yt-dlp 自己決定用哪個格式
-                formatCode = 'best[ext=mp4]';
-                console.log('🎬 Instagram 使用自動選擇格式');
-            }
-            // YouTube：強制 H.264
-            else if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                formatCode = 'best[ext=mp4]/best';
+            } else if (url.includes('youtube.com') || url.includes('youtu.be')) {
                 if (quality === 'low') {
                     formatCode = 'bestvideo[height<=480][ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]/best[height<=480][ext=mp4][vcodec^=avc1]';
                 } else if (quality === 'medium') {
@@ -90,13 +132,10 @@ app.post('/api/download', async (req, res) => {
                 } else {
                     formatCode = 'bestvideo[ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]/best[ext=mp4][vcodec^=avc1]';
                 }
+            } else {
+                formatCode = 'best[ext=mp4]/best';
             }
-            // 其他平台
-            else {
-                formatCode = 'best[ext=mp4]';
-            }
-
-            console.log(`📹 格式代碼: ${formatCode}`);
+            
             await runYtDlp(`-f "${formatCode}" --merge-output-format mp4 -o "${outputTemplate}" "${url}"`);
         }
 
@@ -115,6 +154,61 @@ app.post('/api/download', async (req, res) => {
         });
     } catch (err) {
         console.error('下載錯誤:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========== 下載播放清單（打包成 ZIP） ==========
+app.post('/api/download-playlist', async (req, res) => {
+    const { items, quality, format, playlistTitle } = req.body;
+    if (!items || items.length === 0) return res.status(400).json({ error: '請選擇要下載的項目' });
+    
+    const zipFileName = `${playlistTitle || 'playlist'}_${Date.now()}.zip`;
+    const tempDir = path.join(__dirname, 'temp', Date.now().toString());
+    const downloadDir = path.join(tempDir, 'downloads');
+    fs.mkdirSync(downloadDir, { recursive: true });
+    
+    try {
+        // 逐一處理每個影片
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            console.log(`📥 下載 ${i+1}/${items.length}: ${item.title}`);
+            
+            const outputTemplate = path.join(downloadDir, `${item.title}.%(ext)s`);
+            
+            if (format === 'mp3') {
+                await runYtDlp(`-f bestaudio --extract-audio --audio-format mp3 --audio-quality 2 -o "${outputTemplate}" "${item.url}"`);
+            } else {
+                let formatCode;
+                if (quality === 'low') {
+                    formatCode = 'bestvideo[height<=480][ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]/best[height<=480][ext=mp4][vcodec^=avc1]';
+                } else if (quality === 'medium') {
+                    formatCode = 'bestvideo[height<=720][ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]/best[height<=720][ext=mp4][vcodec^=avc1]';
+                } else {
+                    formatCode = 'bestvideo[ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]/best[ext=mp4][vcodec^=avc1]';
+                }
+                await runYtDlp(`-f "${formatCode}" --merge-output-format mp4 -o "${outputTemplate}" "${item.url}"`);
+            }
+        }
+        
+        // 打包成 ZIP
+        const archiver = require('archiver');
+        const zipPath = path.join(tempDir, zipFileName);
+        const output = fs.createWriteStream(zipPath);
+        const archive = archiver('zip', { zlib: { level: 9 } });
+        
+        archive.pipe(output);
+        archive.directory(downloadDir, false);
+        await archive.finalize();
+        
+        output.on('close', () => {
+            res.download(zipPath, zipFileName, () => {
+                setTimeout(() => fs.rm(tempDir, { recursive: true, force: true }, () => {}), 5000);
+            });
+        });
+        
+    } catch (err) {
+        console.error('播放清單下載錯誤:', err.message);
         res.status(500).json({ error: err.message });
     }
 });

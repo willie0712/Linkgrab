@@ -35,7 +35,7 @@
 
 ### 網頁版
 
-👉 **[https://linkgrab.onrender.com](https://linkgrab.onrender.com)**
+👉 **[https://linkgrab.onrender.com](https://linkgrab.onrender.com)(待開發，請期待作品!)**
 
 ---
 
@@ -85,7 +85,7 @@
 
 ## 📄 授權
 
-MIT License
+2026Ⓡ Zhang Jun Wei
 
 ---
 

@@ -26,7 +26,7 @@
 
 ### PC 版（Windows）
 
-👉 **[下載 LinkGrab.exe](https://github.com/willie0712/LinkGrab/releases/download/v1.0/LinkGrab.exe)**
+👉 **[下載 LinkGrab.exe](https://github.com/willie0712/Linkgrab/releases/tag/v1.0))**
 
 **使用方式：**
 1. 下載 `LinkGrab.exe`
